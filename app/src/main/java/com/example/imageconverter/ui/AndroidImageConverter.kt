@@ -26,7 +26,12 @@ class AndroidImageConverter(private val contentResolver: ContentResolver) : IIma
             val parcelFileDescriptor =
                 contentResolver.openFileDescriptor(Uri.parse(uri), WRITE_MODE)
             parcelFileDescriptor?.let {
-                Thread.sleep(2000)
+                try {
+                    Thread.sleep(2000)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                    println("Convertation canceled")
+                }
                 val fos = FileOutputStream(it.fileDescriptor)
                 this.bitmap?.compress(Bitmap.CompressFormat.PNG, 10, fos)
                 fos.close()
